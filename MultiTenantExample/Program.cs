@@ -12,6 +12,10 @@ builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
 builder.Services.AddTransient<IDeviceService, DeviceService>();
 builder.Services.AddSingleton<ITenantStore, InMemoryTenantStore>();
 
+builder.Services.Configure<RazorViewEngineOptions>(options =>
+{
+    options.ViewLocationExpanders.Add(new TenantViewLocationExpander());
+});
 
 builder.Services.AddControllersWithViews();
 
@@ -25,6 +29,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseMiddleware<TenantResolutionMiddleware>();
 app.UseMiddleware<TenantCssMiddleware>();
 
 app.UseHttpsRedirection();
