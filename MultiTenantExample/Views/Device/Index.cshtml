@@ -1,0 +1,58 @@
+﻿@using MultiTenantExample.Models.Domain
+@model IList<Device>
+
+@{
+    ViewData["Title"] = "Device List";
+}
+
+<h2>Device List</h2>
+
+<p>
+    <a asp-action="Add" class="btn btn-primary">Add New Device</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+	<div class="alert alert-warning" role="alert">
+		No devices found.
+	</div>
+}
+
+@if (TempData["Message"] != null) {
+	<div class="alert alert-success" role="alert">
+		@TempData["Message"]
+	</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var device in Model)
+            {
+                <tr>
+                    <td>@device.Id</td>
+                    <td>@device.Make</td>
+                    <td>@device.Model</td>
+                    <td>@device.Price</td>
+                    <td>@device.Description</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@device.Id">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@device.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@device.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,6 +1,18 @@
+using Microsoft.AspNetCore.Mvc.Razor;
+using MultiTenantExample.Middleware;
+using MultiTenantExample.Repositories;
+using MultiTenantExample.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<ITenantProvider, HttpContextTenantProvider>();
+builder.Services.AddTransient<IDeviceRepository, DeviceRepository>();
+builder.Services.AddTransient<IDeviceService, DeviceService>();
+builder.Services.AddSingleton<ITenantStore, InMemoryTenantStore>();
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

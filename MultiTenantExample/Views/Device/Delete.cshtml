@@ -1,0 +1,54 @@
+﻿@using MultiTenantExample.Models.Domain
+@model Device
+@{
+    ViewData["Title"] = "Delete Device";
+}
+
+<h2>Delete Device</h2>
+
+<div>
+    <h4>Are you sure you want to delete this device?</h4>
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Make)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Make)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Model)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Model)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Price)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Price)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+    </dl>
+
+    @* Include the AntiForgeryToken in a hidden field if needed by your server validation *@
+    @Html.AntiForgeryToken()
+
+    <button id="deleteBtn" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Helper function to retrieve the anti-forgery token value
+        function getAntiForgeryToken() {
+            return document.querySelector('input[name="__RequestVerificationToken"]').value;
+        }
+
+        document.getElementById('deleteBtn').addEventListener('click', function () {
+            var deviceId = @Model.Id;
+            fetch('@Url.Action("Delete", "Device")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify(deviceId)
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+}
