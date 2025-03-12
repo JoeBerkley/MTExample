@@ -25,6 +25,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseMiddleware<TenantCssMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
